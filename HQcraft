@@ -1,0 +1,99 @@
+_addon.name = 'hqcraft'
+_addon.command = 'hqcraft'
+
+require('logger')
+packets = require('packets')
+
+local moghouse_floor = 1
+local craft_results = {
+[0] = 'NQ',
+[1] = 'Break',
+[2] = 'HQ'
+}
+
+function switch_moghouse_floor(floor)
+if type(floor) ~= 'number' then
+error("Switch to floor 1 or 2")
+return
+end
+
+local hex_floors = {
+[1] = 0x7E,
+[2] = 0x7D,
+}
+
+packets.inject(packets.new('outgoing', 0x05E, {
+['Zone Line'] = 1903324538,
+['Type'] = hex_floors[floor],
+}))
+end
+
+windower.register_event('addon command', function (...)
+end)
+
+windower.register_event('incoming chunk', function (id, data)
+if id == 0x30 then
+local packet = packets.parse('incoming', data)
+
+if packet['Player'] == windower.ffxi.get_player().id then
+if craft_results[packet['Param']] ~= 'HQ' then
+moghouse_floor = (moghouse_floor % 2) + 1
+switch_moghouse_floor(moghouse_floor)
+end
+end
+end
+end)
+
+Load battlemods
+Get result
+POS into MH until desired result 
+SnegalToday at 6:37 PM
+_addon.name = 'hqcraft'
+_addon.command = 'hqcraft'
+
+require('logger')
+packets = require('packets')
+
+local moghouse_floor = 1
+local craft_results = {
+[0] = 'NQ',
+[1] = 'Break',
+[2] = 'HQ'
+}
+
+function switch_moghouse_floor(floor)
+if type(floor) ~= 'number' then
+error("Switch to floor 1 or 2")
+return
+end
+
+local hex_floors = {
+[1] = 0x7E,
+[2] = 0x7D,
+}
+
+packets.inject(packets.new('outgoing', 0x05E, {
+['Zone Line'] = 1903324538,
+['Type'] = hex_floors[floor],
+}))
+end
+
+windower.register_event('addon command', function (...)
+end)
+
+windower.register_event('incoming chunk', function (id, data)
+if id == 0x30 then
+local packet = packets.parse('incoming', data)
+
+if packet['Player'] == windower.ffxi.get_player().id then
+if craft_results[packet['Param']] ~= 'HQ' then
+moghouse_floor = (moghouse_floor % 2) + 1
+switch_moghouse_floor(moghouse_floor)
+end
+end
+end
+end)
+
+Load battlemods
+Get result
+POS into MH until desired result
